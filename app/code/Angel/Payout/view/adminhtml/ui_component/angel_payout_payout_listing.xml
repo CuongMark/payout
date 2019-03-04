@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">angel_payout_payout_listing.angel_payout_payout_listing_data_source</item>
+		</item>
+	</argument>
+	<settings>
+		<spinner>angel_payout_payout_columns</spinner>
+		<deps>
+			<dep>angel_payout_payout_listing.angel_payout_payout_listing_data_source</dep>
+		</deps>
+	</settings>
+	<dataSource component="Magento_Ui/js/grid/provider" name="angel_payout_payout_listing_data_source">
+		<settings>
+			<updateUrl path="mui/index/render"/>
+		</settings>
+		<aclResource>Angel_Payout::Payout</aclResource>
+		<dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="angel_payout_payout_listing_data_source">
+			<settings>
+				<requestFieldName>id</requestFieldName>
+				<primaryFieldName>payout_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<listingToolbar name="listing_top">
+		<settings>
+			<sticky>false</sticky>
+		</settings>
+		<exportButton name="export_button" />
+		<bookmark name="bookmarks"/>
+		<columnsControls name="columns_controls"/>
+		<filters name="listing_filters"/>
+		<paging name="listing_paging"/>
+	</listingToolbar>
+	<columns name="angel_payout_payout_columns">
+		<selectionsColumn name="ids">
+			<settings>
+				<indexField>payout_id</indexField>
+			</settings>
+		</selectionsColumn>
+		<column name="payout_id">
+			<settings>
+				<filter>text</filter>
+				<sorting>asc</sorting>
+				<label translate="true">ID</label>
+			</settings>
+		</column>
+		<column name="customer_email">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Customer Email</label>
+			</settings>
+		</column>
+		<column name="phone_number">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">phone_number</label>
+			</settings>
+		</column>
+		<column name="amount" class="Magento\Catalog\Ui\Component\Listing\Columns\Price">
+			<settings>
+				<filter>textRange</filter>
+				<label translate="true">Amount</label>
+			</settings>
+		</column>
+		<column name="currency">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Currency</label>
+			</settings>
+		</column>
+		<column name="admin_name">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Admin</label>
+			</settings>
+		</column>
+		<column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+			<settings>
+				<filter>dateRange</filter>
+				<filter>text</filter>
+				<label translate="true">Created At</label>
+			</settings>
+		</column>
+		<column name="pay_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+			<settings>
+				<filter>dateRange</filter>
+				<filter>text</filter>
+				<label translate="true">Pay At</label>
+			</settings>
+		</column>
+		<column name="status" component="Magento_Ui/js/grid/columns/select">
+			<settings>
+				<options class="Angel\Payout\Model\Payout\Status"/>
+				<filter>select</filter>
+				<dataType>select</dataType>
+				<label translate="true">Status</label>
+			</settings>
+		</column>
+		<actionsColumn class="Angel\Payout\Ui\Component\Listing\Column\PayoutActions" name="actions">
+			<settings>
+				<indexField>payout_id</indexField>
+				<resizeEnabled>false</resizeEnabled>
+				<resizeDefaultWidth>107</resizeDefaultWidth>
+			</settings>
+		</actionsColumn>
+	</columns>
+</listing>

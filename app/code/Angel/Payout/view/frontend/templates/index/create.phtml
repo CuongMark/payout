@@ -1,0 +1,100 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Customer\Block\Form\Register $block */
+?>
+<?= $block->getChildHtml('form_fields_before') ?>
+<?php /* Extensions placeholder */ ?>
+<?= $block->getChildHtml('customer.form.register.extra') ?>
+<form class="form create account form-create-account" action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>" method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off">
+    <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
+    <fieldset class="fieldset create account" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
+        <legend class="legend"><span><?= $block->escapeHtml(__('Payout Information')) ?></span></legend><br>
+        <div class="field amount required">
+            <label class="label" for="number"><span><?= /* @escapeNotVerified */ __('Amount') ?></span></label>
+            <div class="control">
+                <input type="number"
+                       name="amount"
+                       id="amount"
+                       title="<?= /* @escapeNotVerified */ __('Amount') ?>"
+                       class="input-text qty"
+                       data-validate={"required-number":true,"validate-item-quantity":{"minAllowed":1,"maxAllowed":100000}}
+                />
+            </div>
+            <?= $block->getChildHtml('credit_balance') ?>
+        </div>
+
+        <div class="field password required">
+            <label for="password" class="label"><span><?= $block->escapeHtml(__('Security Pass')) ?></span></label>
+            <div class="control">
+                <input type="password" name="security_pass" id="password"
+                       title="<?= $block->escapeHtmlAttr(__('Security Pass')) ?>"
+                       class="input-text"
+                       data-password-min-length="<?= $block->escapeHtmlAttr($block->getMinimumPasswordLength()) ?>"
+                       data-password-min-character-sets="<?= $block->escapeHtmlAttr($block->getRequiredCharacterClassesNumber()) ?>"
+                       data-validate="{required:true, 'validate-customer-password':true}"
+                       autocomplete="off">
+                <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
+                    <div id="password-strength-meter" class="password-strength-meter">
+                        <?= $block->escapeHtml(__('Security Pass Strength')) ?>:
+                        <span id="password-strength-meter-label" data-role="password-strength-meter-label">
+                            <?= $block->escapeHtml(__('No Security Pass')) ?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="field confirmation required">
+            <label for="password-confirmation" class="label"><span><?= $block->escapeHtml(__('Confirm Security Pass')) ?></span></label>
+            <div class="control">
+                <input type="password" name="password_confirmation" title="<?= $block->escapeHtmlAttr(__('Confirm Security Pass')) ?>" id="password-confirmation" class="input-text" data-validate="{required:true, equalTo:'#password'}" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="field comment-field-text">
+            <label for="comment_field" class="label"><span><?= $block->escapeHtml(__('Comment')) ?></span></label>
+            <div class="control">
+                <textarea name="comment" id="comment_field" cols="5" rows="3" data-validate="{required:false}"></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action submit primary" title="<?= $block->escapeHtmlAttr(__('Create an Payout Request')) ?>"><span><?= $block->escapeHtml(__('Create an Payout Request')) ?></span></button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><span><?= $block->escapeHtml(__('Back')) ?></span></a>
+        </div>
+    </div>
+</form>
+<script>
+    require([
+        'jquery',
+        'mage/mage'
+    ], function($){
+        var dataForm = $('#form-validate');
+        var ignore = null;
+        dataForm.mage('validation', {
+            ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+        }).find('input:text').attr('autocomplete', 'off');
+        // dataForm.submit(function( event ) {
+        //     event.preventDefault();
+        // });
+    });
+</script>
+
+<script type="text/x-magento-init">
+    {
+        ".field.password": {
+            "passwordStrengthIndicator": {
+                "formSelector": "form.form-create-account"
+            }
+        }
+    }
+</script>

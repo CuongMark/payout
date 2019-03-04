@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \Angel\Payout\Block\Index\Index $block */
+?>
+
+<div class="actions-toolbar">
+    <div class="primary" style="float: right">
+        <button type="button" class="action save primary" style="float: right" title="<?= __('Create New Requests') ?>"  onclick="window.location.href = '<?= $block->getCreateRequestUrl() ?>'">
+            <span><?= __('Create New Requests') ?></span>
+        </button>
+    </div>
+</div>
+<?php $_payouts = $block->getPayoutRequests(); ?>
+<?php if ($_payouts && count($_payouts)): ?>
+    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-Payouts-table">
+            <caption class="table-caption"><?= /* @escapeNotVerified */ __('Payout Requests') ?></caption>
+            <thead>
+            <tr>
+                <th scope="col" class="col id"><?= /* @escapeNotVerified */ __('Id') ?></th>
+                <th scope="col" class="col amount"><?= /* @escapeNotVerified */ __('Amount') ?></th>
+                <th scope="col" class="col date"><?= /* @escapeNotVerified */ __('Created At') ?></th>
+                <th scope="col" class="col comment"><?= /* @escapeNotVerified */ __('Comment') ?></th>
+                <th scope="col" class="col status"><?= /* @escapeNotVerified */ __('Status') ?></th>
+                <th scope="col" class="col actions"><?= /* @escapeNotVerified */ __('Action') ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php /** @var \Angel\Payout\Model\Data\Payout $_payout */ ?>
+            <?php foreach ($_payouts as $_payout): ?>
+                <tr>
+                    <td data-th="<?= $block->escapeHtml(__('Name')) ?>" class="col id"><?= $_payout->getPayoutId() ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Price')) ?>" class="col total"><?= /* @escapeNotVerified */ $block->formatPrice($_payout->getAmount()) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Purchased At')) ?>" class="col date"><?= /* @escapeNotVerified */ $block->formatDate($_payout->getCreatedAt(), 2 , true) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Comment')) ?>" class="col comment"><?= /* @escapeNotVerified */ $_payout->getComment() ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Status')) ?>" class="col status"><?= /* @escapeNotVerified */ $block->getStatusLabel($_payout) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                        <?php if ($_payout->getStatus() == \Angel\Payout\Model\Payout\Status::STATUS_PENDING || $_payout->getStatus() == \Angel\Payout\Model\Payout\Status::STATUS_PROCESSING): ?>
+                            <a href="<?= /* @escapeNotVerified */ $block->getCancelUrl($_payout) ?>" class="action view">
+                                <span><?= /* @escapeNotVerified */ __('Cancel') ?></span>
+                            </a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?= $block->getPagerHtml() ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?= /* @escapeNotVerified */ __('You have not any Payouts.') ?></span></div>
+<?php endif ?>
