@@ -7,7 +7,7 @@ abstract class Payout extends \Magento\Backend\App\Action
 {
 
     protected $_coreRegistry;
-    const ADMIN_RESOURCE = 'Angel_Payout::top_level';
+    const ADMIN_RESOURCE = 'Angel_Payout::Payout';
 
     /**
      * @param \Magento\Backend\App\Action\Context $context

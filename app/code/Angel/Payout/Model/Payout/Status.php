@@ -16,7 +16,7 @@ class Status extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     const STATUS_PENDING = 0;
     const STATUS_PROCESSING = 1;
-    const STATUS_DONE = 2;
+    const STATUS_PAID = 2;
     const STATUS_CANCELED = 3;
 
     /**
@@ -29,7 +29,7 @@ class Status extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $this->_options = [
             ['value' => self::STATUS_PENDING, 'label' => __('Pending')],
             ['value' => self::STATUS_PROCESSING, 'label' => __('Processing')],
-            ['value' => self::STATUS_DONE, 'label' => __('Done')],
+            ['value' => self::STATUS_PAID, 'label' => __('Paid')],
             ['value' => self::STATUS_CANCELED, 'label' => __('Canceled')],
         ];
         return $this->_options;
@@ -45,7 +45,7 @@ class Status extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         return array(
             self::STATUS_PENDING => __('Pending'),
             self::STATUS_PROCESSING => __('Processing'),
-            self::STATUS_DONE => __('Done'),
+            self::STATUS_PAID => __('Paid'),
             self::STATUS_CANCELED => __('Canceled'),
         );
     }

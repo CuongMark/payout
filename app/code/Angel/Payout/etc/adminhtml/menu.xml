@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Angel::payout_top_level" module="Angel_Payout" resource="Magento_Backend::content" sortOrder="20" title="Angel Payout"/>
+        <add id="Angel::payout_top_level" module="Angel_Payout" resource="Angel_Payout::Payout" sortOrder="20" title="Client Payout"/>
         <add action="angel_payout/payout/index" id="Angel_Payout::angel_payout_payout" module="Angel_Payout" parent="Angel::payout_top_level" resource="Angel_Payout::Payout" sortOrder="99" title="Payout"/>
     </menu>
 </config>

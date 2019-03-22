@@ -3,12 +3,7 @@
 	<acl>
 		<resources>
 			<resource id="Magento_Backend::admin">
-				<resource id="Angel_Payout::Payout" sortOrder="10" title="Payout">
-					<resource id="Angel_Payout::Payout_save" sortOrder="10" title="Save Payout"/>
-					<resource id="Angel_Payout::Payout_delete" sortOrder="20" title="Delete Payout"/>
-					<resource id="Angel_Payout::Payout_update" sortOrder="30" title="Update Payout"/>
-					<resource id="Angel_Payout::Payout_view" sortOrder="40" title="View Payout"/>
-				</resource>
+				<resource id="Angel_Payout::Payout" sortOrder="10" title="Payout"/>
 				<resource id="Magento_Backend::stores">
 					<resource id="Magento_Backend::stores_settings">
 						<resource id="Magento_Config::config">

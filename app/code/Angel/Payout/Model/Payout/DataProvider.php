@@ -63,6 +63,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $items = $this->collection->getItems();
         foreach ($items as $model) {
             $model->unsetData('security_pass');
+            $model->unsetData('current_password');
             $this->loadedData[$model->getId()] = $model->getData();
         }
         $data = $this->dataPersistor->get('angel_payout_payout');
@@ -72,6 +73,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $model = $this->collection->getNewEmptyItem();
             $model->setData($data);
             $model->unsetData('security_pass');
+            $model->unsetData('current_password');
             $this->loadedData[$model->getId()] = $model->getData();
             $this->dataPersistor->clear('angel_payout_payout');
         }

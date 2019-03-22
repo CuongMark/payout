@@ -44,6 +44,10 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue();
+
+        /** @var $user \Magento\User\Model\User */
+        $user = $this->authSession->getUser();
+
         if ($data) {
             $id = $this->getRequest()->getParam('payout_id');
 
@@ -54,15 +58,22 @@ class Save extends \Magento\Backend\App\Action
                 return $resultRedirect->setPath('*/*/');
             }
 
-            if (!$this->encryptor->validateHash($data['security_pass'], $model->getSecurityPass()) && $data['status'] == Status::STATUS_DONE){
-                $this->messageManager->addErrorMessage(__('The Security Pass is not valid.'));
-                return $resultRedirect->setPath('*/*/edit', ['payout_id' => $model->getId()]);
-            }
-
             try {
+
+                if (!$this->encryptor->validateHash($data['security_pass'], $model->getSecurityPass()) && $data['status'] == Status::STATUS_PAID){
+                    $this->messageManager->addErrorMessage(__('The Security Pass is not valid.'));
+                    return $resultRedirect->setPath('*/*/edit', ['payout_id' => $this->getRequest()->getParam('payout_id')]);
+                }
+
                 $model->getResource()->beginTransaction();
+                /** Before updating admin user data, ensure that password of current admin user is entered and is correct */
+                $currentUserPasswordField = \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD;
+                $currentUserPassword = $this->getRequest()->getParam($currentUserPasswordField);
+                $user->performIdentityCheck($currentUserPassword);
 
                 unset($data['security_pass']);
+                unset($data['currency']);
+                unset($data[$currentUserPasswordField]);
 
                 if ($model->getStatus() == Status::STATUS_PROCESSING && $data['status'] == Status::STATUS_CANCELED){
                     $this->_eventManager->dispatch(
@@ -71,14 +82,15 @@ class Save extends \Magento\Backend\App\Action
                     );
                 }
 
+                if ($model->getStatus() == Status::STATUS_PROCESSING && $data['status'] == Status::STATUS_PAID){
+                    $data['pay_at'] = $this->date->date();
+                }
                 $model->setData($data);
 
-                $model->setAdminId($this->authSession->getUser()->getId());
+                $model->setAdminId($user->getId());
                 $model->setUpdatedAt($this->date->date());
-                if ($model->getStatus() == Status::STATUS_PROCESSING && $data['status'] == Status::STATUS_DONE){
-                    $model->setPayAt($this->date->date());
-                }
 
+                $model->unsetData('amount');
                 $model->save();
                 $this->messageManager->addSuccessMessage(__('You saved the Payout.'));
                 $this->dataPersistor->clear('angel_payout_payout');
@@ -93,7 +105,7 @@ class Save extends \Magento\Backend\App\Action
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $model->getResource()->rollBack();
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the Payout.'));
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         
             $this->dataPersistor->set('angel_payout_payout', $data);

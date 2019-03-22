@@ -24,7 +24,7 @@ class AdminUpdateStatus extends \Magento\Eav\Model\Entity\Attribute\Source\Abstr
     {
         $this->_options = [
             ['value' => '', 'label' => __('Please Select')],
-            ['value' => Status::STATUS_DONE, 'label' => __('Done')],
+            ['value' => Status::STATUS_PAID, 'label' => __('Done')],
             ['value' => Status::STATUS_CANCELED, 'label' => __('Canceled')],
         ];
         return $this->_options;
@@ -39,7 +39,7 @@ class AdminUpdateStatus extends \Magento\Eav\Model\Entity\Attribute\Source\Abstr
     {
         return array(
             '' => __('Please Select'),
-            Status::STATUS_DONE => __('Done'),
+            Status::STATUS_PAID => __('Paid'),
             Status::STATUS_CANCELED => __('Canceled'),
         );
     }
